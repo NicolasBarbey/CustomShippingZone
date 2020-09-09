@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://symfony.com/schema/routing"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <!--
+
+    if a /admin/module/customshippingzone/ route is provided, a "Configuration" button will be displayed
+    for the module in the module list. Clicking this button will invoke this route.
+
+
+
+    <route id="my_route_id" path="/admin/module/customshippingzones/route-name">
+        <default key="_controller">CustomShippingZone\Full\Class\Name\Of\YourAdminController::methodName</default>
+    </route>
+
+    <route id="my_route_id" path="/my/route/name">
+        <default key="_controller">CustomShippingZone\Full\Class\Name\Of\YourOtherController::methodName</default>
+    </route>
+
+    ...add as many routes as required.
+
+    <route>
+    ...
+    </route>
+    -->
+    <route id="custom.shipping.zone.create" path="/admin/module/CustomShippingZone/create">
+        <default key="_controller">CustomShippingZone\Controller\CustomShippingZoneController::createShippingZoneAction</default>
+    </route>
+
+    <route id="custom.shipping.zone.delete" path="/admin/module/CustomShippingZone/delete/{id}">
+        <default key="_controller">CustomShippingZone\Controller\CustomShippingZoneController::deleteShippingZoneAction</default>
+    </route>
+
+    <route id="custom.shipping.zone.update" path="/admin/module/CustomShippingZone/update/{id}">
+        <default key="_controller">CustomShippingZone\Controller\CustomShippingZoneController::updateShippingZoneAction</default>
+    </route>
+
+    <route id="custom.shipping.zone.edit.page" path="/admin/module/CustomShippingZone/edit/{id}">
+        <default key="_controller">CustomShippingZone\Controller\CustomShippingZoneController::renderShippingZonePageAction</default>
+    </route>
+
+    <route id="custom.shipping.zone.zip.create" path="/admin/module/CustomShippingZone/zip/create/{id}">
+        <default key="_controller">CustomShippingZone\Controller\CustomShippingZoneController::createZipShippingZoneAction</default>
+    </route>
+
+    <route id="custom.shipping.zone.zip.delete" path="/admin/module/CustomShippingZone/zip/delete/{zipId}">
+        <default key="_controller">CustomShippingZone\Controller\CustomShippingZoneController::deleteZipShippingZoneAction</default>
+    </route>
+
+    <route id="custom.shipping.zone.module.update" path="/admin/module/CustomShippingZone/updateModule/{moduleId}">
+        <default key="_controller">CustomShippingZone\Controller\DeliveryModuleController::updateDeliveryModuleShippingZoneAction</default>
+    </route>
+
+    <route id="custom.shipping.zone.module.remove" path="/admin/module/CustomShippingZone/remove/{id}">
+        <default key="_controller">CustomShippingZone\Controller\DeliveryModuleController::removeDeliveryModuleShippingZoneAction</default>
+    </route>
+
+
+</routes>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database defaultIdMethod="native" name="thelia"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../vendor/propel/propel/resources/xsd/database.xsd" >
+    <!--
+    See propel documentation on http://propelorm.org for all information about schema file
+
+    <table name="product_rel" namespace="CustomShippingZones\Model">
+        <column autoIncrement="true" name="id" primaryKey="true" required="true" type="INTEGER" />
+        <column defaultValue="0" name="visible" required="true" type="TINYINT" />
+        <column defaultValue="0" name="position" required="true" type="INTEGER" />
+        <column name="title" size="255" type="VARCHAR" />
+        <column name="description" type="CLOB" />
+        <column name="chapo" type="LONGVARCHAR" />
+        <column name="postscriptum" type="LONGVARCHAR" />
+        <foreign-key foreignTable="product" name="fk_product_id" onDelete="CASCADE" onUpdate="RESTRICT">
+            <reference foreign="id" local="product_id" />
+        </foreign-key>
+        <behavior name="timestampable" />
+        <behavior name="i18n">
+            <parameter name="i18n_columns" value="title, description, chapo, postscriptum" />
+        </behavior>
+        <behavior name="versionable">
+            <parameter name="log_created_at" value="true" />
+            <parameter name="log_created_by" value="true" />
+        </behavior>
+    </table>
+    -->
+    <table name="custom_shipping_zone_zip" namespace="CustomShippingZone\Model">
+        <column autoIncrement="true" name="id" primaryKey="true" required="true" type="INTEGER" />
+        <column name="custom_shipping_zone_id" required="true" type="INTEGER" />
+        <column name="country_id" required="true" type="INTEGER" />
+        <column name="zip_code" required="true" type="VARCHAR" />
+
+
+        <foreign-key foreignTable="custom_shipping_zone" name="fk_custom_shipping_zone_id" onDelete="CASCADE" onUpdate="RESTRICT">
+            <reference foreign="id" local="custom_shipping_zone_id" />
+        </foreign-key>
+
+        <foreign-key foreignTable="country" name="fk_country_id" onDelete="RESTRICT" onUpdate="RESTRICT">
+            <reference foreign="id" local="country_id" />
+        </foreign-key>
+    </table>
+
+    <table name="custom_shipping_zone" namespace="CustomShippingZone\Model">
+        <column autoIncrement="true" name="id" primaryKey="true" required="true" type="INTEGER" />
+        <column name="name" required="true" type="VARCHAR" />
+        <column name="description" required="true" type="LONGVARCHAR" />
+        <column name="tax" required="false" type="FLOAT"/>
+        <behavior name="timestampable" />
+        <behavior name="i18n">
+            <parameter name="i18n_columns" value="name, description" />
+        </behavior>
+    </table>
+
+    <table name="custom_shipping_zone_modules" namespace="CustomShippingZone\Model">
+        <column autoIncrement="true" name="id" primaryKey="true" required="true" type="INTEGER" />
+        <column name="custom_shipping_zone_id" required="true" type="INTEGER" />
+        <column name="module_id" required="true" type="INTEGER" />
+
+        <foreign-key foreignTable="module" name="fk_custom_shipping_zone_module_id" onDelete="CASCADE" onUpdate="RESTRICT">
+            <reference foreign="id" local="module_id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="custom_shipping_zone" name="fk_module_custom_shipping_zone_id" onDelete="CASCADE" onUpdate="RESTRICT">
+            <reference foreign="id" local="custom_shipping_zone_id" />
+        </foreign-key>
+    </table>
+
+    <external-schema filename="local/config/schema.xml" referenceOnly="true" />
+</database>

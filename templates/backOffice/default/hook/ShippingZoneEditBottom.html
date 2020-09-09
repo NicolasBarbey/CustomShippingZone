@@ -1,0 +1,70 @@
+<div class="general-block-decorator">
+    <div class="title title-without-tabs">
+        {intl l="Custom Shipping Zone Module" d="customshippingzone.bo.default"}
+    </div>
+    <div class="form-container clearfix">
+        <div class="col-md-4">
+            {form name="shipping_zone_edit_module_form"}
+                <form action="{url path="/admin/module/CustomShippingZone/updateModule/%id" id=$delivery_module_id}" method="post">
+                    {form_hidden_fields}
+
+                    {render_form_field field='success_url' value="{url path='/admin/configuration/shipping_zones/update/%id' id=$delivery_module_id}"}
+                    {form_field field='select_zone'}
+                        <div class="form-group">
+                            <label for="{$label_attr.for}" class="control-label">{$label}</label>
+                            <div class="input-group">
+                                <select name="{$name}" id="{$id}" class="form-control">
+                                    {loop name="select_custom_shipping_zone_loop" type="custom_shipping_zone" without_zone="{$delivery_module_id}" locale=$locale}
+                                        <option value={$ID}>{$NAME}</option>
+                                    {/loop}
+                                </select>
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus-sign"></span> {intl l="Add"}</button>
+                                </span>
+                            </div>
+                        </div>
+                    {/form_field}
+                </form>
+            {/form}
+        </div>
+        <div class="col-md-8">
+            <div class="table-responsive">
+                <table class="table table-striped table-condensed">
+                    <thead>
+                    <tr>
+                        <th>{intl l="Shipping zone"}</th>
+                        <th>{intl l="Tax"}</th>
+                        <th class="text-center">{intl l="Actions"}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {foreach $shipping_zones as $shipping_zone}
+                        <tr>
+                            <td>
+                                <a href="{url path="admin/module/CustomShippingZone/edit/%id" id=$shipping_zone['id']}">
+                                    {$shipping_zone['name']}
+                                </a>
+                            </td>
+                            <td>{$shipping_zone['tax']}</td>
+                            <td class="text-center">
+                                <a class="btn btn-default btn-xs delete-zone-area"  href="{url path="/admin/module/CustomShippingZone/remove/%id" id=$shipping_zone['shippingToModuleId']}">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    {foreachelse}
+                        <tr>
+                            <td colspan="3">
+                                <div class="text-center">
+                                    {intl l="There are no custom shipping zones attached to this module."}
+                                </div>
+                            </td>
+                        </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
