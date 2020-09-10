@@ -12,10 +12,10 @@ namespace CustomShippingZone\EventListeners;
 use CustomShippingZone\Model\Base\CustomShippingZoneModules;
 use CustomShippingZone\Model\CustomShippingZoneModulesQuery;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Thelia\Core\Event\Order\OrderEvent;
+use Thelia\Core\Event\Delivery\DeliveryPostageEvent;
 use Thelia\Core\Event\TheliaEvents;
 use Thelia\Core\HttpFoundation\Request;
-use Thelia\Model\AddressQuery;
+
 
 class SetPostageEventListener implements EventSubscriberInterface
 {
@@ -32,19 +32,19 @@ class SetPostageEventListener implements EventSubscriberInterface
     }
 
     /**
-     * @param OrderEvent $event
-     * @return OrderEvent
+     * @param DeliveryPostageEvent $event
+     * @return DeliveryPostageEvent
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function setPostage(OrderEvent $event)
+    public function setModuleDeliveryPostage(DeliveryPostageEvent $event)
     {
-        $deliveryModule = $event->getDeliveryModule();
+        $deliveryModule = $event->getModule();
 
-        $address = AddressQuery::create()->findOneById($event->getDeliveryAddress());
+        $address = $event->getAddress();
 
         $rate = $this->getRequest()->getSession()->getCurrency()->getRate();
 
-        if (!$shippingZoneModule = CustomShippingZoneModulesQuery::create()->filterByModuleId($deliveryModule)->find()->getData()){
+        if (!$shippingZoneModule = CustomShippingZoneModulesQuery::create()->filterByModuleId($deliveryModule->getModuleModel()->getId())->find()->getData()){
             return $event;
         }
 
@@ -54,7 +54,7 @@ class SetPostageEventListener implements EventSubscriberInterface
 
             foreach ($zipCodes as $zipCode){
                 if ($zipCode->getZipCode() === $address->getZipcode() && $zipCode->getCountryId() === $address->getCountryId()){
-                    $event->getOrder()->setPostage($event->getPostage() + ($zoneModule->getCustomShippingZone()->getTax() * $rate));
+                    $event->setPostage($event->getPostage()->getAmount() + ($zoneModule->getCustomShippingZone()->getTax() * $rate));
                     break;
                 }
             }
@@ -67,7 +67,7 @@ class SetPostageEventListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            TheliaEvents::ORDER_SET_POSTAGE => array('setPostage', 128)
+            TheliaEvents::MODULE_DELIVERY_GET_POSTAGE => array('setModuleDeliveryPostage')
         );
     }
 
